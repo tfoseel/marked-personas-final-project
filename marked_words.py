@@ -113,7 +113,7 @@ def marked_words(df, target_val, target_col, unmarked_val, verbose=False):
     in unmarked_attrs)"""
 
     grams = dict()
-    thr = 1.96  # z-score threshold
+    thr = 1  # z-score threshold
 
     subdf = df.copy()
 
