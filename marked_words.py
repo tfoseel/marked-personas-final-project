@@ -24,7 +24,7 @@ def get_log_odds(df1, df2, df0, verbose=False, lower=True):
         int,
         [
             [i, j]
-            for i, j in df1.apply(lambda s: " ".join(mecab.morphs(s)))
+            for i, j in df1.apply(lambda s: " ".join(list(map(lambda p: p[0], filter(lambda x: x[1][0] in "NVM", mecab.pos(s))))))
             .str.lower()
             .str.split(expand=True)
             .stack()
@@ -37,7 +37,7 @@ def get_log_odds(df1, df2, df0, verbose=False, lower=True):
         int,
         [
             [i, j]
-            for i, j in df2.apply(lambda s: " ".join(mecab.morphs(s)))
+            for i, j in df2.apply(lambda s: " ".join(list(map(lambda p: p[0], filter(lambda x: x[1][0] in "NVM", mecab.pos(s))))))
             .str.lower()
             .str.split(expand=True)
             .stack()
@@ -50,7 +50,7 @@ def get_log_odds(df1, df2, df0, verbose=False, lower=True):
         int,
         [
             [i, j]
-            for i, j in df0.apply(lambda s: " ".join(mecab.morphs(s)))
+            for i, j in df0.apply(lambda s: " ".join(list(map(lambda p: p[0], filter(lambda x: x[1][0] in "NVM", mecab.pos(s))))))
             .str.lower()
             .str.split(expand=True)
             .stack()
