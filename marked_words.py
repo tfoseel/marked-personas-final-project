@@ -12,10 +12,13 @@ import argparse
 from collections import defaultdict
 import math
 import sys
-from konlpy.tag import Mecab
+from konlpy.tag import Kkma, Mecab
 
-mecab = Mecab()
+kkma, mecab = Kkma(), Mecab()
+TAGS = ['NNG', 'NNP', 'VV', 'VA', 'VX', 'MM', 'MAG', 'XR']
 
+def preprocess(s):
+    return " ".join(list(map(lambda p: p[0], filter(lambda x: x[1].split("+")[0] in TAGS, mecab.pos(s)))))
 
 def get_log_odds(df1, df2, df0, verbose=False, lower=True):
     """Monroe et al. Fightin' Words method to identify top words in df1 and df2
@@ -24,7 +27,7 @@ def get_log_odds(df1, df2, df0, verbose=False, lower=True):
         int,
         [
             [i, j]
-            for i, j in df1.apply(lambda s: " ".join(list(map(lambda p: p[0], filter(lambda x: x[1][0] in "NVM", mecab.pos(s))))))
+            for i, j in df1.apply(preprocess)
             .str.lower()
             .str.split(expand=True)
             .stack()
@@ -37,7 +40,7 @@ def get_log_odds(df1, df2, df0, verbose=False, lower=True):
         int,
         [
             [i, j]
-            for i, j in df2.apply(lambda s: " ".join(list(map(lambda p: p[0], filter(lambda x: x[1][0] in "NVM", mecab.pos(s))))))
+            for i, j in df2.apply(preprocess)
             .str.lower()
             .str.split(expand=True)
             .stack()
@@ -50,7 +53,7 @@ def get_log_odds(df1, df2, df0, verbose=False, lower=True):
         int,
         [
             [i, j]
-            for i, j in df0.apply(lambda s: " ".join(list(map(lambda p: p[0], filter(lambda x: x[1][0] in "NVM", mecab.pos(s))))))
+            for i, j in df0.apply(preprocess)
             .str.lower()
             .str.split(expand=True)
             .stack()
