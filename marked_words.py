@@ -105,7 +105,7 @@ def get_log_odds(df1, df2, df0, verbose=False, lower=True):
     return delta
 
 
-def marked_words(df, target_val, target_col, unmarked_val, threshold=1.96, verbose=False):
+def marked_words(df, target_val, target_col, unmarked_val, corpus=None, threshold=1.96, verbose=False):
 
     """Get words that distinguish the target group (which is defined as having
     target_group_vals in the target_group_cols column of the dataframe)
@@ -115,6 +115,9 @@ def marked_words(df, target_val, target_col, unmarked_val, threshold=1.96, verbo
     grams = dict()
     thr = threshold  # z-score threshold
 
+    if corpus is None:
+        corpus = df
+
     subdf = df.copy()
 
     for i in range(len(target_val)):
@@ -123,8 +126,8 @@ def marked_words(df, target_val, target_col, unmarked_val, threshold=1.96, verbo
     for i in range(len(unmarked_val)):
         delt = get_log_odds(
             subdf["text"],
-            df.loc[df[target_col[i]] == unmarked_val[i]]["text"],
-            df["text"],
+            df["text"],  # df.loc[df[target_col[i]] == unmarked_val[i]]["text"],
+            corpus["text"],
             verbose,
         )  # first one is the positive-valued one
         c1 = []
